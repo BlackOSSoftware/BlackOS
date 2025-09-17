@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="sticky top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] md:w-[85%] backdrop-blur-md"
+      className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[90%] md:w-[85%] backdrop-blur-md"
     >
       <nav className="flex items-center justify-between px-6 py-3 rounded-full border border-white/10 bg-[var(--color-black)] shadow-lg">
         {/* Logo */}

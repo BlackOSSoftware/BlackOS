@@ -5,13 +5,13 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 const HeroSection: React.FC = () => {
-  const handleVideoPlay = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
-    const video = e.currentTarget;
-    if (video.paused) {
-      video.play().catch(() => {
-      });
-    }
-  };
+  // const handleVideoPlay = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+  //   const video = e.currentTarget;
+  //   if (video.paused) {
+  //     video.play().catch(() => {
+  //     });
+  //   }
+  // };
 
   return (
     <section className="relative w-full h-screen flex items-center justify-center text-center overflow-hidden">
