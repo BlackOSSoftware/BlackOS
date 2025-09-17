@@ -1,32 +1,29 @@
 @import "tailwindcss";
+
 /* Root Colors */
 :root {
   --color-black: #000000;
   --color-white: #FFFFFF;
 
-  --color-primary: #FF4C29;
+  --color-primary: rgb(255 138 0); /* Your requested orange */
   --color-secondary: #1E90FF;
   --color-accent: #FFD700;
   --color-success: #10B981;
-  --color-highlight: #8B5CF6;
+  --color-highlight: #FFB347;
 
-  --background: #FFFFFF;
-  --foreground: #121212;
 }
 
 /* Dark Mode Preference */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-black: #000000;
-    --color-white: #FFFFFF;
-    --background: #121212;
-    --foreground: #E0E0E0;
+   --color-black: #000000;
+  --color-white: #FFFFFF;
 
-    --color-primary: #FF4C29;
-    --color-secondary: #1E90FF;
-    --color-accent: #FFD700;
-    --color-success: #10B981;
-    --color-highlight: #8B5CF6;
+  --color-primary: rgb(255 138 0);
+  --color-secondary: #1E90FF;
+  --color-accent: #FFD700;
+  --color-success: #10B981;
+  --color-highlight: #FFB347;
   }
 }
 
@@ -42,8 +39,6 @@
 *,
 *::before,
 *::after {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
@@ -51,13 +46,13 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background);
+  background-color: var(--color-black);
   color-scheme: light dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-black);
+  color: var(--color-white);
   font-family: var(--font-sans);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;

@@ -13,8 +13,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BlackOS Software SSolution",
-  description: "BlackOS Software Solution is a comprehensive platform offering a range of software products and services designed to meet the needs of modern businesses. Our solutions are tailored to enhance productivity, streamline operations, and drive growth.",
+   title: "BlackOS — AI-driven software & design",
+  description: "BlackOS builds enterprise AI solutions and modern UX. Design-led engineering, secure systems, and fast delivery.",
+  openGraph: {
+    title: "BlackOS — AI-driven software & design",
+    description: "BlackOS builds enterprise AI solutions and modern UX.",
+  }
 };
 
 export default function RootLayout({

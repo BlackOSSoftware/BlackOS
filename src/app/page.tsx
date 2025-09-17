@@ -1,3 +1,4 @@
+import HeroSection from "./components/landing/HeroSection";
 
 export default function Home() {
 
@@ -11,7 +12,7 @@ export default function Home() {
 };
   return (
     <>
-      <h1>Welcome to BlackOS Software Solution</h1>
+      <HeroSection />
     </>
   );
 }
