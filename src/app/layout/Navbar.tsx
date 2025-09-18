@@ -66,12 +66,18 @@ const Navbar: React.FC = () => {
           </ul>
 
           {/* Button (Desktop Only) */}
-          <button className="hidden md:block relative px-5 py-2 rounded-xl font-semibold border border-white/10 text-[var(--color-white)] transition-all duration-300 hover:scale-105 group overflow-hidden">
-            <span className="absolute inset-0 z-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-highlight)] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <span className="relative z-10 flex items-center gap-2">
-              Let&apos;s Talk ↗
-            </span>
-          </button>
+          <button
+  className="hidden md:block relative px-5 py-2 rounded-xl font-semibold border border-white/10 text-[var(--color-white)] transition-all duration-300 hover:scale-105 group overflow-hidden"
+  style={{
+    background:
+      "radial-gradient(20.45% 49.5% at 100% 94.33%, rgb(158, 100, 46) 0%, rgba(255, 255, 255, 0) 100%)",
+  }}
+>
+  <span className="relative z-10 flex items-center gap-2">
+    Let&apos;s Talk ↗
+  </span>
+</button>
+
 
           {/* Mobile Menu Button */}
           <button
@@ -138,6 +144,10 @@ const Navbar: React.FC = () => {
               <button
                 onClick={() => setIsOpen(false)}
                 className="mt-10 relative px-6 py-3 rounded-xl font-semibold overflow-hidden group border border-white/10 text-white transition-transform duration-300 hover:scale-105"
+                style={{
+    background:
+      "radial-gradient(20.45% 49.5% at 100% 94.33%, rgb(158, 100, 46) 0%, rgba(255, 255, 255, 0) 100%)",
+  }}
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-highlight)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
                 <span className="relative z-10">Let&apos;s Talk ↗</span>
