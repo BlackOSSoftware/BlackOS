@@ -59,9 +59,12 @@ export default function WhyUs() {
         viewport={{ once: true }}
         className="px-4"
       >
-        <span className="bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs sm:text-sm px-4 sm:px-5 py-1 rounded-full font-medium tracking-wide">
-          Why Choose Us
-        </span>
+            <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  className="px-4 py-2 rounded-full border border-[var(--color-highlight)] text-sm mb-4"
+                >
+                  Why Choose Us
+                </motion.button>
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mt-6 leading-snug">
           Empowering Businesses <br className="hidden sm:block" /> With Expertise & Innovation
         </h2>

@@ -16,9 +16,12 @@ export default function OurMission() {
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
       >
-        <span className="bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs sm:text-sm px-4 py-1 rounded-full font-medium tracking-wide">
-          Our Mission
-        </span>
+            <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  className="px-4 py-2 rounded-full border border-[var(--color-highlight)] text-sm mb-4"
+                >
+                  Our Mission
+                </motion.button>
       </motion.div>
 
       {/* Main Heading */}

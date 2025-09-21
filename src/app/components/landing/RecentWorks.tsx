@@ -49,9 +49,13 @@ export default function RecentWorksTabs() {
     >
       {/* Top Center Heading */}
       <div className="text-center max-w-3xl mx-auto px-4">
-        <span className="bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-xs sm:text-sm px-5 py-1 rounded-full font-medium tracking-wide">
-          Work That Makes Us Proud
-        </span>
+       
+         <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  className="px-4 py-2 rounded-full border border-[var(--color-highlight)] text-sm mb-4"
+                >
+                  Work That Makes Us Proud
+                </motion.button>
 
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mt-6 leading-snug">
           Recent Works,{" "}
