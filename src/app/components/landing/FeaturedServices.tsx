@@ -51,7 +51,7 @@ const services: Service[] = [
 export default function FeaturedServices() {
   return (
     <section className="w-full py-16 bg-[var(--color-black)]">
-      <div className="max-w-7xl mx-auto px-6 text-center">
+      <div className="max-w-6xl mx-auto px-6 text-center">
         {/* Section Heading */}
         <h2 className="text-lg font-medium text-[var(--color-white)] mb-10">
           Our <span className="text-[var(--color-primary)]">Featured Services</span>

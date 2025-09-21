@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { motion } from "framer-motion";
 import Button from "../Reuse/button";
+import { ArrowDownNarrowWide } from "lucide-react";
 
 export default function OurMission() {
   return (
@@ -77,6 +78,19 @@ export default function OurMission() {
           </SwiperSlide>
         </Swiper>
       </div>
+      {/* Down Arrow Motion */}
+          <motion.div
+            initial={{ y: 0 }}
+            animate={{ y: [0, 10, 0] }}
+            transition={{
+              duration: 1.5, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+            }}
+            className="flex justify-center mt-6"
+          >
+            <ArrowDownNarrowWide className="w-7 h-7 text-[var(--color-primary)]" />
+          </motion.div>
     </section>
   );
 }

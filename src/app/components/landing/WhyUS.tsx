@@ -4,8 +4,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Autoplay } from "swiper/modules"; // 👈 Autoplay module import
 import { motion } from "framer-motion";
-import { Lightbulb, Smartphone, Handshake } from "lucide-react";
+import { Lightbulb, Smartphone, Handshake, ArrowDownNarrowWide } from "lucide-react";
 import { JSX } from "react";
+import Button from "../Reuse/button";
 
 type Benefit = {
   icon: JSX.Element;
@@ -81,7 +82,7 @@ export default function WhyUs() {
           spaceBetween={20}
           slidesPerView={1}
           breakpoints={{
-            480: { slidesPerView: 1.2 }, 
+            480: { slidesPerView: 1.2 },
             640: { slidesPerView: 1.5 },
             768: { slidesPerView: 2 },
             1024: { slidesPerView: 3 },
@@ -110,8 +111,12 @@ export default function WhyUs() {
                   {benefit.description}
                 </p>
               </motion.div>
+
             </SwiperSlide>
           ))}
+          <Button className="mx-auto mt-4">See Pricing</Button>
+          
+
         </Swiper>
       </div>
     </section>

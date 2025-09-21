@@ -3,6 +3,10 @@ import HeroSection from "./components/landing/HeroSection";
 import FeaturedServices from "./components/landing/FeaturedServices";
 import WhyUs from "./components/landing/WhyUS";
 import OurMission from "./components/landing/OurMission";
+import RecentWorks from "./components/landing/RecentWorks";
+import Stats from "./components/landing/Stats";
+import Services from "./components/landing/Service";
+import ServicesGrid from "./components/landing/ServiceGrid";
 
 export default function Home() {
 
@@ -14,6 +18,10 @@ export default function Home() {
       <FeaturedServices />
       <WhyUs />
       <OurMission />
+      <RecentWorks />
+      <Stats />
+      <Services />
+      <ServicesGrid />
     </>
   );
 }

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Button from "../components/Reuse/button";
 import { useRouter, usePathname } from "next/navigation";
@@ -10,42 +10,61 @@ import { useRouter, usePathname } from "next/navigation";
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [active, setActive] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
+
+  const dropdownRef = useRef<HTMLLIElement>(null);
   const router = useRouter();
   const pathname = usePathname();
 
   const navItems = [
-  { label: "About", href: "#about", id: "about" },
-  { label: "Why Us", href: "#why-us", id: "why-us" },
-  { label: "Mission", href: "#mission", id: "mission" },
-  { label: "Works", href: "#works", id: "works" },
-  { label: "Services", href: "#services", id: "services" },
-  { label: "Pages", href: "#pages", id: "pages" },
-];
+    { label: "About", href: "#about", id: "about" },
+    { label: "Why Us", href: "#why-us", id: "why-us" },
+    { label: "Mission", href: "#mission", id: "mission" },
+    { label: "Works", href: "#works", id: "works" },
+    { label: "Services", href: "/services", id: "services-page" },
+    { label: "Pages", href: "#", id: "pages" },
+  ];
 
-
-  // 👇 Scroll-based active state
-useEffect(() => {
-  const handleScroll = () => {
-    let current = "";
-    navItems.forEach((item) => {
-      const section = document.getElementById(item.id);
-      if (section) {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-          current = item.label;
-        }
+  // ✅ Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsDropdownOpen(false);
       }
-    });
-    if (current) setActive(current);
-  };
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
-  window.addEventListener("scroll", handleScroll);
-  handleScroll(); // run on mount
+  // ✅ Active section based on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      let current = "";
+      navItems.forEach((item) => {
+        if (item.href.startsWith("#")) {
+          const section = document.getElementById(item.id);
+          if (section) {
+            const rect = section.getBoundingClientRect();
+            if (
+              rect.top <= window.innerHeight / 2 &&
+              rect.bottom >= window.innerHeight / 2
+            ) {
+              current = item.label;
+            }
+          }
+        }
+      });
+      if (current) setActive(current);
+    };
 
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [pathname]);
-
-
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [pathname]);
 
   return (
     <>
@@ -73,32 +92,82 @@ useEffect(() => {
 
           {/* Desktop Menu */}
           <ul className="hidden md:flex items-center gap-8 text-sm font-medium">
-            {navItems.map((item) => (
-              <li key={item.label} className="relative">
-                <a
-                  href={item.href}
-                  className={`cursor-pointer transition-colors duration-300 ${
-                    active === item.label
-                      ? "text-[var(--color-primary)]"
-                      : "text-white hover:text-[var(--color-primary)]"
-                  }`}
-                >
-                  {item.label}
-                </a>
-                {active === item.label && (
-                  <motion.div
-                    layoutId="underline"
-                    className="absolute left-0 -bottom-1 h-[2px] w-full bg-[var(--color-primary)] rounded-full"
-                  />
-                )}
-              </li>
-            ))}
+            {navItems.map((item) =>
+              item.label === "Pages" ? (
+                <li key={item.label} className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setIsDropdownOpen((prev) => !prev)}
+                    className={`flex items-center gap-1 cursor-pointer transition-colors duration-300 ${
+                      active === item.label
+                        ? "text-[var(--color-primary)]"
+                        : "text-white hover:text-[var(--color-primary)]"
+                    }`}
+                  >
+                    {item.label}
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform ${
+                        isDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  <AnimatePresence>
+                    {isDropdownOpen && (
+                      <motion.ul
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full mt-2 w-48 bg-[var(--color-black)]/90 border border-white/10 rounded-xl shadow-lg backdrop-blur-md py-3"
+                      >
+                        {[
+                          { label: "Contact Us", href: "/contact" },
+                          { label: "Terms & Conditions", href: "/terms" },
+                          { label: "Our Pricing", href: "/pricing" },
+                          { label: "About Us", href: "/about" },
+                        ].map((link) => (
+                          <li key={link.label}>
+                            <Link
+                              href={link.href}
+                              className="block px-4 py-2 text-sm text-white hover:bg-[var(--color-primary)]/20 transition-colors"
+                            >
+                              {link.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </motion.ul>
+                    )}
+                  </AnimatePresence>
+                </li>
+              ) : (
+                <li key={item.label} className="relative">
+                  <Link
+                    href={item.href}
+                    className={`cursor-pointer transition-colors duration-300 ${
+                      active === item.label
+                        ? "text-[var(--color-primary)]"
+                        : "text-white hover:text-[var(--color-primary)]"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                  {active === item.label && item.href.startsWith("#") && (
+                    <motion.div
+                      layoutId="underline"
+                      className="absolute left-0 -bottom-1 h-[2px] w-full bg-[var(--color-primary)] rounded-full"
+                    />
+                  )}
+                </li>
+              )
+            )}
           </ul>
 
           {/* Desktop Button */}
-          <Button onClick={() => router.push("/contact")}>
-            Let&apos;s Talk ↗
-          </Button>
+          <div className="hidden md:block">
+            <Button onClick={() => router.push("/contact")}>
+              Let&apos;s Talk ↗
+            </Button>
+          </div>
 
           {/* Mobile Menu Button */}
           <button
@@ -125,46 +194,99 @@ useEffect(() => {
 
             {/* Sidebar */}
             <motion.div
-              className="fixed top-0 right-0 h-full w-[75%] bg-[var(--color-black)]/75 backdrop-blur-md z-50 p-6 flex flex-col"
+              className="fixed top-0 right-0 h-full w-[75%] bg-[var(--color-black)]/75 backdrop-blur-md z-50 p-6 flex flex-col justify-between"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "tween", duration: 0.4 }}
             >
-              {/* Close Button */}
-              <button
-                className="self-end mb-8 text-white transition-colors duration-300 hover:text-[var(--color-primary)]"
-                onClick={() => setIsOpen(false)}
-              >
-                <X className="w-7 h-7" />
-              </button>
+              <div>
+                {/* Close Button */}
+                <button
+                  className="self-end mb-8 text-white transition-colors duration-300 hover:text-[var(--color-primary)]"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <X className="w-7 h-7" />
+                </button>
 
-              {/* Links */}
-              <ul className="flex flex-col gap-6 text-lg font-medium">
-                {navItems.map((item) => (
-                  <li key={item.label}>
-                    <a
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={`cursor-pointer transition-colors duration-300 ${
-                        active === item.label
-                          ? "text-[var(--color-primary)]"
-                          : "text-white hover:text-[var(--color-primary)]"
-                      }`}
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+                {/* Links */}
+                <ul className="flex flex-col gap-6 text-lg font-medium">
+                  {navItems.map((item) =>
+                    item.label === "Pages" ? (
+                      <li key={item.label}>
+                        <button
+                          onClick={() =>
+                            setIsMobileDropdownOpen((prev) => !prev)
+                          }
+                          className={`flex items-center justify-between w-full transition-colors ${
+                            active === item.label
+                              ? "text-[var(--color-primary)]"
+                              : "text-white hover:text-[var(--color-primary)]"
+                          }`}
+                        >
+                          {item.label}
+                          <ChevronDown
+                            className={`w-5 h-5 transition-transform ${
+                              isMobileDropdownOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
 
-              {/* Button */}
+                        <AnimatePresence>
+                          {isMobileDropdownOpen && (
+                            <motion.ul
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="ml-4 mt-2 flex flex-col gap-3 border-l border-white/20 pl-4"
+                            >
+                              {[
+                                { label: "Contact Us", href: "/contact" },
+                                { label: "Terms & Conditions", href: "/terms" },
+                                { label: "Our Pricing", href: "/pricing" },
+                                { label: "About Us", href: "/about" },
+                              ].map((link) => (
+                                <li key={link.label}>
+                                  <Link
+                                    href={link.href}
+                                    onClick={() => setIsOpen(false)}
+                                    className="text-white hover:text-[var(--color-primary)]"
+                                  >
+                                    {link.label}
+                                  </Link>
+                                </li>
+                              ))}
+                            </motion.ul>
+                          )}
+                        </AnimatePresence>
+                      </li>
+                    ) : (
+                      <li key={item.label}>
+                        <Link
+                          href={item.href}
+                          onClick={() => setIsOpen(false)}
+                          className={`cursor-pointer transition-colors duration-300 ${
+                            active === item.label
+                              ? "text-[var(--color-primary)]"
+                              : "text-white hover:text-[var(--color-primary)]"
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+
+              {/* ✅ Button always at bottom */}
               <Button
                 onClick={() => {
                   setIsOpen(false);
                   router.push("/contact");
                 }}
-                className="mt-10 block md:hidden"
+                className="w-full mt-6"
               >
                 Let&apos;s Talk ↗
               </Button>

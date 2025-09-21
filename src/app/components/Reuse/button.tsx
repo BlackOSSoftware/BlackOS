@@ -18,7 +18,7 @@ export default function Button({ children, onClick, className }: ButtonProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
-      className={`hidden md:block relative px-5 py-2 rounded-xl font-semibold border border-white/10 text-[var(--color-white)] group overflow-hidden ${className}`}
+      className={`block relative px-5 py-2 rounded-xl font-semibold border border-white/10 text-[var(--color-white)] group overflow-hidden ${className}`}
       style={{
         background:
           "radial-gradient(60% 120% at 100% 100%, rgba(255,138,0,0.95) 0%, rgba(30,30,30,0.9) 100%)",

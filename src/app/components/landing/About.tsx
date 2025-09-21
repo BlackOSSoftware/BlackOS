@@ -14,7 +14,7 @@ const AboutSection: React.FC = () => {
     return (
         <section
             id="about"
-            className="relative max-w-7xl mx-auto bg-[var(--color-black)] text-[var(--color-white)] py-20"
+            className="relative max-w-6xl mx-auto bg-[var(--color-black)] text-[var(--color-white)] py-20"
         >
             <div className="container mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 {/* Left Content */}
