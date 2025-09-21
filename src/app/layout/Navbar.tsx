@@ -1,21 +1,51 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
+import Button from "../components/Reuse/button";
+import { useRouter, usePathname } from "next/navigation";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [active, setActive] = useState("");
+  const router = useRouter();
+  const pathname = usePathname();
 
   const navItems = [
-    { label: "About", href: "#about" },
-    { label: "Why Us", href: "#whyus" },
-    { label: "Mission", href: "#mission" },
-    { label: "Works", href: "#works" },
-    { label: "Services", href: "#services" },
-    { label: "Pages", href: "#pages" },
-  ];
+  { label: "About", href: "#about", id: "about" },
+  { label: "Why Us", href: "#why-us", id: "why-us" },
+  { label: "Mission", href: "#mission", id: "mission" },
+  { label: "Works", href: "#works", id: "works" },
+  { label: "Services", href: "#services", id: "services" },
+  { label: "Pages", href: "#pages", id: "pages" },
+];
+
+
+  // 👇 Scroll-based active state
+useEffect(() => {
+  const handleScroll = () => {
+    let current = "";
+    navItems.forEach((item) => {
+      const section = document.getElementById(item.id);
+      if (section) {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+          current = item.label;
+        }
+      }
+    });
+    if (current) setActive(current);
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  handleScroll(); // run on mount
+
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [pathname]);
+
+
 
   return (
     <>
@@ -28,9 +58,10 @@ const Navbar: React.FC = () => {
       >
         <nav className="flex items-center justify-between px-6 py-3 rounded-full border border-white/10 bg-[var(--color-black)]/75 shadow-lg">
           {/* Logo */}
-          <div
+          <Link
+            href="/"
+            scroll={true}
             className="group flex items-center gap-2 text-xl font-bold cursor-pointer"
-            onClick={() => setActive("about")}
           >
             <span className="text-[var(--color-primary)] transition-transform duration-500 group-hover:rotate-180">
               ⟠
@@ -38,7 +69,7 @@ const Navbar: React.FC = () => {
             <span className="text-white transition-colors duration-300 group-hover:text-[var(--color-primary)]">
               BlackOS
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Menu */}
           <ul className="hidden md:flex items-center gap-8 text-sm font-medium">
@@ -46,7 +77,6 @@ const Navbar: React.FC = () => {
               <li key={item.label} className="relative">
                 <a
                   href={item.href}
-                  onClick={() => setActive(item.label)}
                   className={`cursor-pointer transition-colors duration-300 ${
                     active === item.label
                       ? "text-[var(--color-primary)]"
@@ -65,19 +95,10 @@ const Navbar: React.FC = () => {
             ))}
           </ul>
 
-          {/* Button (Desktop Only) */}
-          <button
-  className="hidden md:block relative px-5 py-2 rounded-xl font-semibold border border-white/10 text-[var(--color-white)] transition-all duration-300 hover:scale-105 group overflow-hidden"
-  style={{
-    background:
-      "radial-gradient(20.45% 49.5% at 100% 94.33%, rgb(158, 100, 46) 0%, rgba(255, 255, 255, 0) 100%)",
-  }}
->
-  <span className="relative z-10 flex items-center gap-2">
-    Let&apos;s Talk ↗
-  </span>
-</button>
-
+          {/* Desktop Button */}
+          <Button onClick={() => router.push("/contact")}>
+            Let&apos;s Talk ↗
+          </Button>
 
           {/* Mobile Menu Button */}
           <button
@@ -124,10 +145,7 @@ const Navbar: React.FC = () => {
                   <li key={item.label}>
                     <a
                       href={item.href}
-                      onClick={() => {
-                        setActive(item.label);
-                        setIsOpen(false);
-                      }}
+                      onClick={() => setIsOpen(false)}
                       className={`cursor-pointer transition-colors duration-300 ${
                         active === item.label
                           ? "text-[var(--color-primary)]"
@@ -141,17 +159,15 @@ const Navbar: React.FC = () => {
               </ul>
 
               {/* Button */}
-              <button
-                onClick={() => setIsOpen(false)}
-                className="mt-10 relative px-6 py-3 rounded-xl font-semibold overflow-hidden group border border-white/10 text-white transition-transform duration-300 hover:scale-105"
-                style={{
-    background:
-      "radial-gradient(20.45% 49.5% at 100% 94.33%, rgb(158, 100, 46) 0%, rgba(255, 255, 255, 0) 100%)",
-  }}
+              <Button
+                onClick={() => {
+                  setIsOpen(false);
+                  router.push("/contact");
+                }}
+                className="mt-10 block md:hidden"
               >
-                <span className="absolute inset-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-highlight)] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-                <span className="relative z-10">Let&apos;s Talk ↗</span>
-              </button>
+                Let&apos;s Talk ↗
+              </Button>
             </motion.div>
           </>
         )}

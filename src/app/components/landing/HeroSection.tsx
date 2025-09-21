@@ -3,9 +3,11 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import Button from "../Reuse/button";
+import { useRouter } from "next/navigation";
 
 const HeroSection: React.FC = () => {
-  
+  const router = useRouter();
 
   return (
     <section className="relative w-full h-screen flex items-center justify-center text-center overflow-hidden">
@@ -47,7 +49,7 @@ const HeroSection: React.FC = () => {
           reliable, and future-ready solutions tailored to your needs.
         </motion.p>
 
-        <motion.button
+        {/* <motion.button
           onClick={() => (window.location.href = "/contact")}
           className="group relative px-10 py-4 rounded-full font-bold shadow-xl transition-transform hover:scale-105 overflow-hidden focus:outline-none"
           initial={{ opacity: 0, scale: 0.8 }}
@@ -58,7 +60,8 @@ const HeroSection: React.FC = () => {
           <span className="relative z-10 flex items-center gap-2 text-white">
             Get Started <ArrowRight className="w-6 h-6" />
           </span>
-        </motion.button>
+        </motion.button> */}
+        <Button onClick={() => router.push("/contact")} className="mx-auto mt-4 p-3">Get Started <ArrowRight className="w-5 h-5" /></Button>
       </div>
     </section>
   );

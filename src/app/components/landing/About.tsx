@@ -8,6 +8,7 @@ import Image from "next/image";
 
 import "swiper/css";
 import "swiper/css/pagination";
+import Button from "../Reuse/button";
 
 const AboutSection: React.FC = () => {
     return (
@@ -41,17 +42,7 @@ const AboutSection: React.FC = () => {
                         solutions that help you achieve sustainable growth in a
                         fast-changing world.
                     </p>
-                    <button
-                        className="relative px-6 py-3 rounded-xl font-semibold overflow-hidden border border-white/10 text-[var(--color-white)] transition-all duration-300 group"
-                    >
-                        {/* Background Layer */}
-                        <span className="absolute inset-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-highlight)] opacity-100 group-hover:opacity-80 transition-opacity duration-300 rounded-xl" />
-
-                        {/* Text */}
-                        <span className="relative z-10 flex items-center gap-2">
-                            Learn More ↗
-                        </span>
-                    </button>
+                    <Button > Learn More ↗</Button>
 
                 </motion.div>
 
