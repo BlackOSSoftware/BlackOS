@@ -15,6 +15,6 @@ export default async function connectDB(): Promise<Db> {
     await client.connect();
   }
 
-  db = client.db("blackos"); // 👈 your DB name here
+  db = client.db("blackos"); 
   return db;
 }

@@ -1,27 +1,55 @@
+// src/app/api/leads/[id]/route.ts
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import connectDB from "@/app/lib/mongodb";
+type RouteContext = unknown; // don't export a concrete shape — avoid Next's ParamCheck mismatch
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, context: RouteContext) {
   try {
+    // narrow the context safely
+    const ctx = context as { params?: { id?: string } } | undefined;
+    const id = ctx?.params?.id;
+    if (!id) {
+      return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    }
+
     const body = await req.json();
     const db = await connectDB();
-    await db.collection("leads").updateOne(
-      { _id: new ObjectId(params.id) },
-      { $set: body }
+
+    const res = await db.collection("leads").updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { ...body, updatedAt: new Date() } }
     );
+
+    if (res.matchedCount === 0) {
+      return NextResponse.json({ error: "Lead not found" }, { status: 404 });
+    }
+
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (err) {
+    console.error("PUT /api/leads/[id] error:", err);
     return NextResponse.json({ error: "Failed to update lead" }, { status: 500 });
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, context: RouteContext) {
   try {
+    const ctx = context as { params?: { id?: string } } | undefined;
+    const id = ctx?.params?.id;
+    if (!id) {
+      return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    }
+
     const db = await connectDB();
-    await db.collection("leads").deleteOne({ _id: new ObjectId(params.id) });
+    const res = await db.collection("leads").deleteOne({ _id: new ObjectId(id) });
+
+    if (res.deletedCount === 0) {
+      return NextResponse.json({ error: "Lead not found" }, { status: 404 });
+    }
+
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (err) {
+    console.error("DELETE /api/leads/[id] error:", err);
     return NextResponse.json({ error: "Failed to delete lead" }, { status: 500 });
   }
 }

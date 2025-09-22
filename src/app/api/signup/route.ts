@@ -2,15 +2,13 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import clientPromise from "@/app/lib/mongodb"; // your clientPromise
-
+import connectDB from "@/app/lib/mongodb";
 const SignupSchema = z.object({
   username: z.string().min(3),
   email: z.string().email(),
   password: z.string().min(6),
 });
 
-// Helpful GET so accidental browser GET doesn't just show 405 in dev logs
 export async function GET() {
   return NextResponse.json(
     { message: "This endpoint accepts POST requests for user signup. Use POST with JSON body." },
@@ -20,17 +18,14 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    // log for dev debugging
     console.log("[/api/signup] POST called");
 
     const body = await req.json();
     const { username, email, password } = SignupSchema.parse(body);
 
-    const client = await clientPromise;
-    const dbName = "blackos";
-    const db = client.db(dbName);
+    const db = await connectDB(); // returns Db directly
 
-    // ensure index (safe to run, will be noop if exists)
+    // ensure index
     await db.collection("users").createIndex({ email: 1 }, { unique: true });
 
     const existing = await db.collection("users").findOne({ email });
@@ -47,12 +42,15 @@ export async function POST(req: Request) {
       createdAt: new Date(),
     });
 
-    return NextResponse.json({ success: true, message: "User registered successfully", id: result.insertedId });
+    return NextResponse.json({
+      success: true,
+      message: "User registered successfully",
+      id: result.insertedId,
+    });
   } catch (err: unknown) {
-  if (err instanceof Error) {
-    return NextResponse.json({ error: err.message }, { status: 400 });
+    if (err instanceof Error) {
+      return NextResponse.json({ error: err.message }, { status: 400 });
+    }
+    return NextResponse.json({ error: "Something went wrong" }, { status: 400 });
   }
-  return NextResponse.json({ error: "Something went wrong" }, { status: 400 });
-}
-
 }
