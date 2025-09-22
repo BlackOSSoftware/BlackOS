@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Button from "../Reuse/button";
+import { useRouter } from "next/navigation";
 
 const pricingPlans = [
   {
@@ -51,6 +52,7 @@ const pricingPlans = [
 
 
 export default function PricingPage() {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-[var(--color-black)] text-[var(--color-white)] py-16 px-6">
       <div className="max-w-6xl mx-auto text-center">
@@ -115,7 +117,7 @@ export default function PricingPage() {
         <motion.div whileHover={{ scale: 1.05 }} className="mt-12">
           <Button
             className="mx-auto"
-            onClick={() => alert("Redirect to full pricing page")}
+            onClick={() => router.push("/pricing")}
           >
             View Complete Pricing Comparison →
           </Button>

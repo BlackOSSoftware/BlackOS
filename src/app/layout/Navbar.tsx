@@ -26,6 +26,25 @@ const Navbar: React.FC = () => {
     { label: "Pages", href: "#", id: "pages" },
   ];
 
+  // ✅ Helper for navigation + scroll
+  const handleNavClick = (href: string) => {
+    if (href.startsWith("#")) {
+      if (pathname === "/") {
+        // Already on home → smooth scroll
+        const id = href.replace("#", "");
+        const section = document.getElementById(id);
+        if (section) {
+          section.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        // Not on home → go to home with hash
+        router.push("/" + href);
+      }
+    } else {
+      router.push(href);
+    }
+  };
+
   // ✅ Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -40,8 +59,10 @@ const Navbar: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // ✅ Active section based on scroll
-  useEffect(() => {
+  // ✅ Active section highlight
+  // ✅ Active section highlight
+useEffect(() => {
+  if (pathname === "/") {
     const handleScroll = () => {
       let current = "";
       navItems.forEach((item) => {
@@ -58,13 +79,24 @@ const Navbar: React.FC = () => {
           }
         }
       });
-      if (current) setActive(current);
+      if (current) {
+        setActive(current);
+      } else {
+        setActive(""); // no section active
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
     handleScroll();
+
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname]);
+  } else {
+    // ✅ On other pages → mark correct page item
+    const currentNav = navItems.find((item) => item.href === pathname);
+    setActive(currentNav ? currentNav.label : "");
+  }
+}, [pathname]);
+
 
   return (
     <>
@@ -141,8 +173,8 @@ const Navbar: React.FC = () => {
                 </li>
               ) : (
                 <li key={item.label} className="relative">
-                  <Link
-                    href={item.href}
+                  <button
+                    onClick={() => handleNavClick(item.href)}
                     className={`cursor-pointer transition-colors duration-300 ${
                       active === item.label
                         ? "text-[var(--color-primary)]"
@@ -150,7 +182,7 @@ const Navbar: React.FC = () => {
                     }`}
                   >
                     {item.label}
-                  </Link>
+                  </button>
                   {active === item.label && item.href.startsWith("#") && (
                     <motion.div
                       layoutId="underline"
@@ -263,9 +295,11 @@ const Navbar: React.FC = () => {
                       </li>
                     ) : (
                       <li key={item.label}>
-                        <Link
-                          href={item.href}
-                          onClick={() => setIsOpen(false)}
+                        <button
+                          onClick={() => {
+                            setIsOpen(false);
+                            handleNavClick(item.href);
+                          }}
                           className={`cursor-pointer transition-colors duration-300 ${
                             active === item.label
                               ? "text-[var(--color-primary)]"
@@ -273,7 +307,7 @@ const Navbar: React.FC = () => {
                           }`}
                         >
                           {item.label}
-                        </Link>
+                        </button>
                       </li>
                     )
                   )}
