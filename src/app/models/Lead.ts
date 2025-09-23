@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { string } from "zod";
 
 export interface ILead extends Document {
   name: string;
@@ -27,6 +28,7 @@ const LeadSchema: Schema = new Schema(
     sowGiven: { type: Boolean, default: false },
     finalPrice: { type: Number, default: 0 },
     terms: { type: Number, default: 3 },
+    meetingSchedule: { type: String },
     payments: [{ type: Number, default: 0 }],
   },
   { timestamps: true }

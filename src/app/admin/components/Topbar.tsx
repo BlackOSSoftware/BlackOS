@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/app/components/Reuse/button";
 import { Bell, Settings, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -20,12 +21,15 @@ export default function Topbar() {
         <button className="hover:text-[var(--color-highlight)] transition">
           <Settings size={20} />
         </button>
-        <button
+        {/* <button
           onClick={handleLogout}
           className="bg-red-600 hover:bg-red-700 px-4 py-1 rounded flex items-center gap-2 transition"
         >
           <LogOut size={16} /> Logout
-        </button>
+        </button> */}
+        <Button onClick={handleLogout}>
+          <LogOut size={16} /> Logout
+        </Button>
       </div>
     </header>
   );

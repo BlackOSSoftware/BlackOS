@@ -6,7 +6,6 @@ type RouteContext = unknown; // don't export a concrete shape — avoid Next's P
 
 export async function PUT(req: Request, context: RouteContext) {
   try {
-    // narrow the context safely
     const ctx = context as { params?: { id?: string } } | undefined;
     const id = ctx?.params?.id;
     if (!id) {
@@ -14,11 +13,14 @@ export async function PUT(req: Request, context: RouteContext) {
     }
 
     const body = await req.json();
-    const db = await connectDB();
 
+    // 🛠 Remove _id if it exists in body
+    const { _id, ...updateData } = body;
+
+    const db = await connectDB();
     const res = await db.collection("leads").updateOne(
       { _id: new ObjectId(id) },
-      { $set: { ...body, updatedAt: new Date() } }
+      { $set: { ...updateData, updatedAt: new Date() } }
     );
 
     if (res.matchedCount === 0) {
@@ -31,6 +33,7 @@ export async function PUT(req: Request, context: RouteContext) {
     return NextResponse.json({ error: "Failed to update lead" }, { status: 500 });
   }
 }
+
 
 export async function DELETE(req: Request, context: RouteContext) {
   try {

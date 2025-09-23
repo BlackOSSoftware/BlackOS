@@ -101,20 +101,32 @@ export default function Sidebar() {
                 key={item.name}
                 href={item.link}
                 className={clsx(
-                  "relative flex items-center gap-3 p-2 rounded-md transition-all duration-200",
+                  "relative flex items-center gap-3 p-2 rounded-md transition-all duration-200 ",
                   { "justify-center": !isOpen },
                   isActive
-                    ? "bg-[var(--color-primary)] text-black font-semibold"
+                    ? "text-black font-semibold" // removed bg from class
                     : "text-gray-300 hover:bg-[var(--color-secondary)]/30 hover:text-[var(--color-accent)]"
                 )}
+                style={
+                  isActive
+                    ? {
+                      background:
+                        "radial-gradient(60% 120% at 100% 100%, rgba(255,138,0,0.95) 0%, rgba(30,30,30,0.9) 100%)",
+                        color: "white",
+                    }
+                    : undefined
+                }
               >
-                {isActive && <span className="absolute left-0 h-full w-1 bg-[var(--color-primary)]" />}
+                {isActive && (
+                  <span className="absolute left-0 h-full w-1 bg-[var(--color-primary)]" />
+                )}
                 <span>{item.icon}</span>
                 {isOpen && <span className="flex-1">{item.name}</span>}
                 {item.notification && isOpen && (
                   <span className="w-2 h-2 rounded-full bg-red-500 flex-shrink-0" />
                 )}
               </Link>
+
             );
           })}
         </nav>

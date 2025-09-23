@@ -3,17 +3,19 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plus, Edit, Trash2, Save, Search } from "lucide-react";
+import Button from "@/app/components/Reuse/button";
 
 type Lead = {
   _id?: string;
   name: string;
   phone: string;
-    description?: string;
+  description?: string;
   source: "Justdial" | "Personal" | "Other";
   handler: "Anas" | "Aman";
   status: string;
   followUp: string;
   sow: "Yes" | "No";
+  meetingSchedule?: string;
   price?: string;
   terms?: { [key: string]: string };
 };
@@ -29,14 +31,15 @@ export default function LeadsPage() {
     fetch("/api/leads")
       .then((res) => res.json())
       .then((data) => {
+        console.log(data)
         if (Array.isArray(data)) setLeads(data);
         else setLeads([]);
       });
   }, []);
 
- const handleChange = <K extends keyof Lead>(field: K, value: Lead[K]) => {
-  setForm((prev) => ({ ...prev, [field]: value }));
-}; 
+  const handleChange = <K extends keyof Lead>(field: K, value: Lead[K]) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
 
   const saveLead = async () => {
     if (!form.name || !form.phone) return;
@@ -94,7 +97,7 @@ export default function LeadsPage() {
       <div className="bg-[#111] p-6 rounded-xl shadow-lg mb-6">
         <div className="grid md:grid-cols-2 gap-4">
           <input
-            placeholder="Name"
+            placeholder="Customer Name"
             value={form.name || ""}
             onChange={(e) => handleChange("name", e.target.value)}
             className="p-3 rounded-lg bg-[#1a1a1a] border border-gray-700 focus:border-[var(--color-primary)] outline-none w-full"
@@ -145,12 +148,7 @@ export default function LeadsPage() {
             <option value="NPC">NPC not pickup call</option>
             <option value="unreachable">Unreachable</option>
           </select>
-          {/* <input
-            placeholder="Status"
-            value={form.status || ""}
-            onChange={(e) => handleChange("status", e.target.value)}
-            className="p-3 rounded-lg bg-[#1a1a1a] border border-gray-700 focus:border-[var(--color-primary)] outline-none w-full"
-          /> */}
+
           <input
             placeholder="Follow Up"
             value={form.followUp || ""}
@@ -167,6 +165,14 @@ export default function LeadsPage() {
             <option value="No">No</option>
           </select>
           <input
+            type="datetime-local"
+            placeholder="Meeting Schedule"
+            value={form.meetingSchedule || ""}
+            onChange={(e) => handleChange("meetingSchedule", e.target.value)}
+            className="p-3 rounded-lg bg-[#1a1a1a] border border-gray-700 focus:border-[var(--color-primary)] outline-none w-full"
+          />
+
+          <input
             placeholder="Final Price"
             value={form.price || ""}
             onChange={(e) => handleChange("price", e.target.value)}
@@ -174,13 +180,17 @@ export default function LeadsPage() {
           />
         </div>
 
-        <button
+        {/* <button
           onClick={saveLead}
           className="mt-6 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[var(--color-primary)] text-white hover:opacity-90 transition"
         >
           {editId ? <Save size={18} /> : <Plus size={18} />}
           {editId ? "Update Lead" : "Add Lead"}
-        </button>
+        </button> */}
+        <Button onClick={saveLead} className="mt-6 w-full flex items-center justify-center gap-2 rounded-lg bg-[var(--color-primary)]  ">
+        {editId ? <Save size={18} /> : <Plus size={18} />}
+          {editId ? "Update Lead" : "Add Lead"}
+        </Button>
       </div>
 
       {/* Search */}
@@ -209,6 +219,7 @@ export default function LeadsPage() {
               <th className="p-2">Follow Up</th>
               <th className="p-2">SOW</th>
               <th className="p-2">Price</th>
+              <th className="p-2">Meeting</th>
               <th className="p-2">Actions</th>
             </tr>
           </thead>
@@ -224,6 +235,7 @@ export default function LeadsPage() {
                 <td className="p-2">{lead.followUp}</td>
                 <td className="p-2">{lead.sow}</td>
                 <td className="p-2">{lead.price}</td>
+                <td className="p-2">{lead.meetingSchedule}</td>
                 <td className="p-2 flex gap-2">
                   <button
                     onClick={() => editLead(lead)}
@@ -267,13 +279,14 @@ export default function LeadsPage() {
               <p>Status: {lead.status}</p>
               <p>Follow Up: {lead.followUp}</p>
               <p>SOW: {lead.sow}</p>
+              <p>Meeting: {lead.meetingSchedule}</p>
               <p>Price: {lead.price}</p>
               <div className="flex gap-2 mt-3">
                 <button
                   onClick={() => editLead(lead)}
                   className="flex-1 p-2 rounded bg-blue-500 text-white hover:bg-blue-600"
                 >
-                  <Edit size={16}  /> Edit
+                  <Edit size={16} /> Edit
                 </button>
                 <button
                   onClick={() => deleteLead(lead._id!)}
