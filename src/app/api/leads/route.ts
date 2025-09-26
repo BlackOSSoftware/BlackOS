@@ -1,5 +1,5 @@
 // src/app/api/leads/route.ts
-import connectDB from "@/app/lib/mongodb";
+import { connectDB } from "@/app/lib/mongodb";
 import { NextResponse } from "next/server";
 
 export async function GET() {

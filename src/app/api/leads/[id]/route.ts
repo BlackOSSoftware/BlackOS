@@ -1,7 +1,7 @@
 // src/app/api/leads/[id]/route.ts
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
-import connectDB from "@/app/lib/mongodb";
+import { connectDB } from "@/app/lib/mongodb";
 type RouteContext = unknown; // don't export a concrete shape — avoid Next's ParamCheck mismatch
 
 export async function PUT(req: Request, context: RouteContext) {

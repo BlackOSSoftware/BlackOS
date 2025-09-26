@@ -1,41 +1,30 @@
-// src/app/api/signup/route.ts
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
-import connectDB from "@/app/lib/mongodb";
+import { connectDB } from "@/app/lib/mongodb";
+
 const SignupSchema = z.object({
-  username: z.string().min(3),
+  username: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
 });
 
-export async function GET() {
-  return NextResponse.json(
-    { message: "This endpoint accepts POST requests for user signup. Use POST with JSON body." },
-    { status: 200 }
-  );
-}
-
 export async function POST(req: Request) {
   try {
-    console.log("[/api/signup] POST called");
-
     const body = await req.json();
     const { username, email, password } = SignupSchema.parse(body);
 
-    const db = await connectDB(); // returns Db directly
+    const db = await connectDB();
+    const users = db.collection("users");
 
-    // ensure index
-    await db.collection("users").createIndex({ email: 1 }, { unique: true });
-
-    const existing = await db.collection("users").findOne({ email });
-    if (existing) {
+    const existingUser = await users.findOne({ email });
+    if (existingUser) {
       return NextResponse.json({ error: "User already exists" }, { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await db.collection("users").insertOne({
+    const result = await users.insertOne({
       username,
       email,
       password: hashedPassword,
@@ -48,9 +37,6 @@ export async function POST(req: Request) {
       id: result.insertedId,
     });
   } catch (err: unknown) {
-    if (err instanceof Error) {
-      return NextResponse.json({ error: err.message }, { status: 400 });
-    }
-    return NextResponse.json({ error: "Something went wrong" }, { status: 400 });
+    return NextResponse.json({ error: (err as Error).message }, { status: 400 });
   }
 }

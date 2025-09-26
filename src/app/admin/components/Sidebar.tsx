@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Users, MessageSquare, Settings, Target, CalendarCheck, FileText, UserCog, Briefcase, BarChart3 } from "lucide-react";
 import { BiCube } from "react-icons/bi";
-import { MdDraw, MdWork } from "react-icons/md";
+import { MdWork } from "react-icons/md";
 import clsx from "clsx";
 
 interface MenuItem {
