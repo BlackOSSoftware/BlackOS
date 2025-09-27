@@ -13,3 +13,5 @@ out/
 # Environment variables
 .env
 .vercel
+package-lock.json
+package.json

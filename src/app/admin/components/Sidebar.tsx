@@ -4,8 +4,6 @@ import { useState, useEffect, ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, Users, MessageSquare, Settings, Target, CalendarCheck, FileText, UserCog, Briefcase, BarChart3 } from "lucide-react";
-import { BiCube } from "react-icons/bi";
-import { MdWork } from "react-icons/md";
 import clsx from "clsx";
 
 interface MenuItem {
@@ -16,10 +14,11 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-  { name: "Dashboard", icon: <BiCube size={20} />, link: "/admin" },
+  { name: "Dashboard", icon: <Target size={20} />, link: "/admin" },
 
   // CRM / Leads
   { name: "Leads", icon: <Target size={20} />, link: "/admin/leads", notification: true },
+  { name: "Meetings", icon: <Target size={20} />, link: "/admin/meetings" },
   { name: "Tasks", icon: <CalendarCheck size={20} />, link: "/admin/tasks" },
   { name: "Reports", icon: <FileText size={20} />, link: "/admin/reports" },
 
@@ -29,7 +28,7 @@ const menuItems: MenuItem[] = [
   { name: "Boss Panel", icon: <Briefcase size={20} />, link: "/admin/boss" },
 
   // Productivity / Monitoring
-  { name: "Workflows", icon: <MdWork size={20} />, link: "/admin/workflows" },
+  { name: "Workflows", icon: <Target size={20} />, link: "/admin/workflows" },
   { name: "Analytics", icon: <BarChart3 size={20} />, link: "/admin/analytics" },
 
   // Communication
